@@ -302,11 +302,19 @@ st.write(
 
 st.pyplot(grafico_validacao(comparacao))
 
+# A cor segue o TAMANHO do erro, não o sinal: quanto mais vermelho, mais longe do real.
+colunas_diferenca = ["Diferença Random Forest", "Diferença KNN"]
 st.dataframe(
     comparacao.style.format("{:,.0f}").background_gradient(
-        axis=0, subset=["Diferença Random Forest", "Diferença KNN"], cmap="RdYlGn_r"
+        axis=None,
+        subset=colunas_diferenca,
+        gmap=comparacao[colunas_diferenca].abs(),
+        cmap="RdYlGn_r",
     ),
     width="stretch",
+)
+st.caption(
+    "Quanto mais vermelha a célula, maior a distância entre o previsto e o real naquele mês."
 )
 
 st.divider()
