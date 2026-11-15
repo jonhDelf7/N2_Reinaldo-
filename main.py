@@ -100,7 +100,7 @@ def validar(dados, meses_teste=24):
         comparacao[nome] = previsto
         comparacao[f"Diferença {nome}"] = previsto - teste["total"].to_numpy()
 
-    comparacao.index = comparacao.index.strftime("%m/%Y")
+    comparacao.index = comparacao.index.strftime("%m/%Y") # pyright: ignore[reportAttributeAccessIssue]
     return comparacao
 
 
@@ -307,7 +307,7 @@ colunas_diferenca = ["Diferença Random Forest", "Diferença KNN"]
 st.dataframe(
     comparacao.style.format("{:,.0f}").background_gradient(
         axis=None,
-        subset=colunas_diferenca,
+        subset=colunas_diferenca, # pyright: ignore[reportArgumentType]
         gmap=comparacao[colunas_diferenca].abs(),
         cmap="RdYlGn_r",
     ),
@@ -325,7 +325,7 @@ st.pyplot(grafico_projecao(db, previsoes))
 tabela_projecao = pd.DataFrame(
     {nome: serie[serie.index.month == 9] for nome, serie in previsoes.items()}
 )
-tabela_projecao.index = tabela_projecao.index.strftime("%m/%Y")
+tabela_projecao.index = tabela_projecao.index.strftime("%m/%Y") # pyright: ignore[reportAttributeAccessIssue]
 st.dataframe(tabela_projecao.style.format("{:,.0f}"), width="stretch")
 
 st.caption("A projeção é um cenário de inércia, não uma garantia.")
