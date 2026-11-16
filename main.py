@@ -272,13 +272,20 @@ dados = preparar_para_modelo(db)
 comparacao = validar(dados)
 previsoes = projetar(dados)
 
+def em_milhoes(valor):
+    """58565884 vira '58,6 milhões'. Escrito por extenso e com vírgula decimal,
+    que é o padrão brasileiro. Abreviar para 'mi' faz o tradutor automático do
+    navegador entender como a abreviação inglesa de milhas."""
+    return f"{valor / 1_000_000:.1f}".replace(".", ",") + " milhões"
+
+
 coluna1, coluna2, coluna3, coluna4 = st.columns(4)
 coluna1.metric("Meses analisados", len(db))
-coluna2.metric("Pessoas em 09/2022", f"{db['total'].iloc[-1] / 1_000_000:.1f} mi")
-coluna3.metric(
-    "Famílias em 09/2022", f"{db['familias_vulnerabilidade'].iloc[-1] / 1_000_000:.1f} mi"
+coluna2.metric("Pessoas em 09/2022", em_milhoes(db["total"].iloc[-1]))
+coluna3.metric("Famílias em 09/2022", em_milhoes(db["familias_vulnerabilidade"].iloc[-1]))
+coluna4.metric(
+    "Da população", f"{db['pct_vulnerabilidade'].iloc[-1]:.0f}".replace(".", ",") + "%"
 )
-coluna4.metric("Da população", f"{db['pct_vulnerabilidade'].iloc[-1]:.0f}%")
 
 st.divider()
 
